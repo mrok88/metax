@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load humanize %}
+{% block title %}{{ form.yws_gets.title }}{% endblock %} 
+
+{% block include_datatable %}
+{% include "datatable.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container_x" style="margin:0% 5% 5% 5%">
+    {# Display a form #}
+    <form action="djbs06" method="get" class="form-inline">
+        <div class="form-group bootstrap3-required"> 
+            <h3>{{ form.yws_gets.title }} </h3>   
+            <label for="Search">테이블명:</label>        
+            {% bootstrap_form form layout='inline' align=right %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary" layout='inline'> 
+                {% bootstrap_icon "star" %} 제출
+                </button>
+            {% endbuttons %}
+        </div>
+    </form>
+    <p></p>
+    <hr>
+
+    <div id="container" class="dataTables_wrapper">
+            <table id="example" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
+                <thead>
+                <tr>
+                    <td><B>모델명</B></td>
+                    <td><B>한글명</B></td>
+                    <td><B>테이블</B></td>
+                    <td><B>속성명</B></td>
+                    <td><B>컬럼명</B></td>
+                    <td><B>데이터타입</B></td>
+                    <td><B>널여부</B></td>
+                    <td><B>기본값</B></td>
+                    <td><B>순서</B></td>
+                    <td><B>컬럼정의</B></td>                    
+                </tr>
+                </thead>
+                <!-- 이 부분이 바뀌었습니다 -->
+                <tbody>
+                        {% for row in form.yws_rows %}
+                        <tr>
+                            <td> {{ row.MDL_NM }} </td>
+                            <td> {{ row.ENT_NM }} </td>
+                            <td> {{ row.TBL_NM }} </td>
+                            <td> {{ row.ATTR_NM }} </td>
+                            {% if '_CD' in  row.COL_NM  %}
+                                <td onClick="javascript:get_cd_list('{{ row.ATTR_NM }}({{ row.COL_NM }}) 코드목록','{{ row.COL_NM }}')" class="yws_pnt" > {{ row.COL_NM }} </td>
+                            {% else %}
+                                <td> {{ row.COL_NM }} </td>
+                            {% endif %}
+                            <td> {{ row.DT }} </td>
+                            <td> {{ row.NULLABLE }} </td>
+                            <td> {{ row.DEFT|default_if_none:"" }} </td>
+                            <td> {{ row.POS }} </td>
+                            <td style="white-space:pre-wrap; word-wrap:break-word" >{{ row.DEFI }}</td>                            
+                        </tr>
+                        {% endfor %}
+                <!-- 여기까지 -->
+                <tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" class="init">
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "paging":   false,
+        "ordering" : true,
+        "order": [[ 0, "asc" ],[ 2, "asc" ],[ 8, "asc" ]],
+        "info":     true,
+        "columns": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,                                                                       
+                        null,                                                                       
+                        { "width": "20%" }
+                    ]
+    } );
+} );
+</script>
+{% block include_modal %}
+{% include "cd_ajax.html" %}
+{% endblock %}
+{% endblock content %}

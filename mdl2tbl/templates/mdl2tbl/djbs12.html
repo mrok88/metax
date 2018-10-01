@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load humanize %}
+{% block title %}{{ form.yws_gets.title }}{% endblock %} 
+
+{% block include_datatable %}
+{% include "datatable.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container_x" style="margin:0% 5% 5% 5%">
+    {# Display a form #}
+    <form action="{{form.yws_gets.submitUrl}}" method="get" class="form-inline">
+        <div class="form-group bootstrap3-required"> 
+            <h3>{{ form.yws_gets.title }} </h3>   
+            <label for="Search">주제영역:</label>        
+            {% bootstrap_form form layout='inline' align=right %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary" layout='inline'> 
+                {% bootstrap_icon "star" %} 제출
+                </button>
+            {% endbuttons %}
+        </div>
+    </form>
+    <p></p>
+    <hr>    
+    <div id="container" class="dataTables_wrapper">
+            <table id="example" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
+                <thead>
+                    <tr>
+                        <td><B>구분</B></td>
+                        <td><B>소스</B></td>
+                        <td><B>타겟</B></td>
+                        <td><B>비고</B></td>                
+                    </tr>
+                </thead>
+                <!-- 이 부분이 바뀌었습니다 -->
+                <tbody>
+                    {% for row in form.yws_rows %}
+                    <tr>
+                        <td> {{ row.TYP }} </td>
+                        <td> {{ row.SRC }} </td>
+                        <td> {{ row.TGT }} </td>             
+                        <td> {{ row.ETC }} </td>             
+                    </tr>
+                    {% endfor %}
+                <!-- 여기까지 -->
+                <tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" class="init">
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "columns": [
+                { "width": "10%" },
+                { "width": "20%" },
+                { "width": "20%" },
+                { "width": "50%" }
+            ],       
+        "paging":   false,
+        "ordering" : true,
+        "order": [[ 1, "asc" ],[2,"asc"] ],
+        "info":     true
+    } );
+} );
+
+</script>
+
+{% endblock content %}

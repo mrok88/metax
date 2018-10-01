@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block title %}{{ form.yws_gets.title }}{% endblock %} 
+{% block subtitle %} 모델 비교 ( {{ form.yws_gets.subjArea }} ) {% endblock %}
+
+{% block include_datatable %}
+{% include "datatable.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {# Display a form #}
+    <form action="djbs01" method="get" class="form-inline">  
+        <div class="form-group bootstrap3-required"> 
+            <h3>{{ form.yws_gets.title }} ( {{ form.yws_gets.subjArea}} ) </h3>   
+            <label for="Search">주제영역:</label>        
+            {% bootstrap_form form layout='inline' align=right %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary" layout='inline'> 
+                {% bootstrap_icon "star" %} 제출
+                </button>
+            {% endbuttons %}
+         </div>
+    </form>
+    <p></p>
+    <hr>
+
+
+    <div id="container" class="dataTables_wrapper">
+            <table id="example" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
+                <thead>
+                <tr>
+                    <td><B>스키마</B></td>
+                    <td><B>테이블</B></td>
+                    <td><B>컬럼</B></td>
+                    <td><B>차이  (DT|NULL|DEFT : 모델값 <=> 테이블값 )</B></td>
+                </tr>
+                </thead>
+                <!-- 이 부분이 바뀌었습니다 -->
+                <tbody>
+                        {% for row in form.yws_rows %}
+                        <tr>
+                            <td> {{ row.SCHEMA }} </td>
+                            <td> {{ row.TBL_NM }} </td>
+                            {% if '_CD' in  row.COL_NM  %}
+                                <td onClick="javascript:get_cd_list('({{ row.COL_NM }}) 코드목록','{{ row.COL_NM }}')" class="yws_pnt" > {{ row.COL_NM }} </td>
+                            {% else %}
+                                <td> {{ row.COL_NM }} </td>
+                            {% endif %}  
+                            <td> {{ row.DIFF|safe }} </td>
+                        </tr>
+                        {% endfor %}
+                <!-- 여기까지 -->
+                <tbody>
+        </table>
+    </div>
+</div>    
+<script type="text/javascript" class="init">
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "paging":   false,
+        "ordering" : true,
+        "order": [[ 1, "asc" ]],
+        "info":     true
+    } );
+} );
+</script>
+
+{% block include_modal %}
+{% include "cd_ajax.html" %}
+{% endblock %}
+
+{% endblock content %}

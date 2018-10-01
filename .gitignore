@@ -1,0 +1,8 @@
+*.pyc
+*~
+__pycache__
+/static
+db.sqlite3
+metax/conn_info.py
+metax/my_conn.py
+/docs

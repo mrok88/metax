@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load humanize %}
+{% block title %}{{ form.yws_gets.title }}{% endblock %} 
+
+{% block include_datatable %}
+{% include "datatable.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container_x" style="margin:0% 5% 5% 5%">
+    {# Display a form #}
+    <form action="djbs05" method="get" class="form-inline">
+        <div class="form-group bootstrap3-required"> 
+            <h3>{{ form.yws_gets.title }} </h3>   
+            <label for="Search">주제영역:</label>        
+            {% bootstrap_form form layout='inline' align=right %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary" layout='inline'> 
+                {% bootstrap_icon "star" %} 제출
+                </button>
+            {% endbuttons %}
+        </div>
+    </form>
+    <p></p>
+    <hr>
+
+    <div id="container" class="dataTables_wrapper">
+            <table id="example" class="display table table-striped table-bordered" cellspacing="0" width="100%" >
+                <thead>
+                <tr>
+                    <td><B>모델명</B></td>
+                    <td><B>한글명</B></td>
+                    <td><B>테이블</B></td>
+                    <td><B>상태</B></td>
+                    <td><B>발생주기</B></td>
+                    <td><B>월증가건수</B></td>
+                    <td><B>보존주기</B></td>
+                    <td><B>초기건수</B></td>
+                    <td><B>테이블정의</B></td>                    
+                </tr>
+                </thead>
+                <!-- 이 부분이 바뀌었습니다 -->
+                <tbody>
+                        {% for row in form.yws_rows %}
+                        <tr>
+                            <td> {{ row.MDL_NM }} </td>
+                            <td> {{ row.ENT_NM }} </td>
+                            <td> {{ row.TBL_NM }} </td>
+                            <td> {{ row.STAT }} </td>
+                            <td> {{ row.OCCUR_CYCLE|default:"" }} </td>
+                            <td align="right"> {{ row.MONTHY_OCCUR_QTY|intcomma }} </td>
+                            <td> {{ row.MNGT_CYCLE }} </td>
+                            <td align="right"> {{ row.TOT_OCCUR_QTY|intcomma }} </td>
+                            <td style="white-space:pre-wrap; word-wrap:break-word"  >{{ row.DEFI }}</td>                            
+                        </tr>
+                        {% endfor %}
+                <!-- 여기까지 -->
+                <tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" class="init">
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "paging":   false,
+        "ordering" : true,
+        "order": [[ 1, "asc" ]],
+        "info":     true
+    } );
+} );
+</script>
+{% endblock content %}

@@ -1,1 +1,1 @@
-python36 manage.py process_tasks
+nohup python36 manage.py process_tasks &> batch.out&

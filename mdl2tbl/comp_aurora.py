@@ -304,6 +304,65 @@ def comp_idx_dev_tst(subjArea):
     # print(ret2)
     return (ret0+ret2)
 
+def comp_dev_prd(subjArea):
+    db_map = map_dev_prd(subjArea)
+    if ( len(db_map) < 1 ) :
+        return [{ 'TYP' : '주제영역변경필요', 'SRC' : '주제영역변경필요','TGT' :'주제영역변경필요', 'ETC' : '주제영역변경필요 '}]        
+    # source_db = 'elltdev'
+    # source_schema = 'elltgddev'        
+    # target_db = 'elltprd1'
+    # target_schema = 'elltgdprd'  
+    source_db = db_map['source_db']
+    source_schema = db_map['source_schema']
+    target_db = db_map['target_db']
+    target_schema = db_map['target_schema']
+    #테이블비교      
+    target_not_exists,source_not_exists,ret0 = chk_tbl_list(source_db,source_schema,target_db,target_schema)
+    #print(ret0)
+    #컬럼비교
+    ret1 = chk_col_list(source_db,source_schema,source_not_exists,target_db,target_schema,target_not_exists)
+    #print(ret1)
+    return (ret0+ret1)
+
+def map_dev_prd(subjArea):
+    db_map = {  
+            'elltcc' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltccdev' ,'target_db' : 'elltprd4', 'target_schema' : 'elltccprd'   },
+            'elltch' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltchdev' ,'target_db' : 'elltprd2', 'target_schema' : 'elltchprd'   },
+            'elltdp' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltdpdev' ,'target_db' : 'elltprd1', 'target_schema' : 'elltdpprd'   },
+            'elltet' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltetdev' ,'target_db' : 'elltprd3', 'target_schema' : 'elltetprd'   },
+            'elltgd' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltgddev' ,'target_db' : 'elltprd1', 'target_schema' : 'elltgdprd'   },
+            'elltmb' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltmbdev' ,'target_db' : 'elltprd2', 'target_schema' : 'elltmbprd'   },
+            'elltom' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltomdev' ,'target_db' : 'elltprd3', 'target_schema' : 'elltomprd'   },
+            'elltpy' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltpydev' ,'target_db' : 'elltprd3', 'target_schema' : 'elltpyprd'   },
+            'elltlo' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltlodev' ,'target_db' : 'elltprd3', 'target_schema' : 'elltloprd'   },
+            'elltpr' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltprdev' ,'target_db' : 'elltprd2', 'target_schema' : 'elltprprd'   },
+            'elltsc' : { 'source_db' : 'elltdev' ,'source_schema' : 'elltscdev' ,'target_db' : 'elltprd5', 'target_schema' : 'elltscprd'   },
+            'ltcmst' : { 'source_db' : 'ltcmdev' ,'source_schema' : 'ltcmstdev' ,'target_db' : 'ltcmprd1', 'target_schema' : 'ltcmstprd'   },
+            'ltcmpr' : { 'source_db' : 'ltcmdev' ,'source_schema' : 'ltcmprdev' ,'target_db' : 'ltcmprd1', 'target_schema' : 'ltcmprprd'   },
+            'ltcmat' : { 'source_db' : 'ltcmdev' ,'source_schema' : 'ltcmatdev' ,'target_db' : 'ltcmprd1', 'target_schema' : 'ltcmatprd'   }    }  
+    if ( subjArea in db_map.keys()) :
+        return db_map[subjArea]
+    else: 
+        return {} 
+
+def comp_idx_dev_prd(subjArea):
+    db_map = map_dev_prd(subjArea)
+    if ( len(db_map) < 1 ) :
+        return [{ 'TYP' : '데이터없음', 'SRC' : '데이터없음','TGT' :'테이터없음', 'ETC' : '데이터없음 '}]        
+    source_db = db_map['source_db']
+    source_schema = db_map['source_schema']
+    target_db = db_map['target_db']
+    target_schema = db_map['target_schema']
+    #테이블비교      
+    target_not_exists,source_not_exists,ret0 = chk_tbl_list(source_db,source_schema,target_db,target_schema)
+    # print("=============== 테이블비교 ===============")
+    # print(ret0)
+    #인덱스비교
+    ret2 = chk_idx_list(source_db,source_schema,source_not_exists,target_db,target_schema,target_not_exists)
+    # print("=============== index비교 ===============")
+    # print(ret2)
+    return (ret0+ret2)  
+        
 if __name__=='__main__':
     # try:
     print(sys.argv[1])

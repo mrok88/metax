@@ -24,8 +24,11 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><div>DB비교<span class="caret"></span></div></a>
               <ul class="dropdown-menu">                             
                 <li> <a href="{% url 'mdl2tbl:djbs12' %}"><span>AURORA(dev<=>tst)비교</span></a></li>                           
-                <li> <a href="{% url 'mdl2tbl:djbs13' %}"><span>AURORA인덱스(dev<=>tst)비교</span></a></li>  
+                <li> <a href="{% url 'mdl2tbl:djbs12p' %}"><span>AURORA(dev<=>prd)비교</span></a></li>    
                 <li role="separator" class="divider"></li>
+                <li> <a href="{% url 'mdl2tbl:djbs13' %}"><span>AURORA인덱스(dev<=>tst)비교</span></a></li>  
+                <li> <a href="{% url 'mdl2tbl:djbs13p' %}"><span>AURORA인덱스(dev<=>prd)비교</span></a></li>  
+                <li role="separator" class="divider"></li>                
                 <li><a href="{% url 'dq:tblCpy_list2' %}"><span>데이터 복제 조회</span></a></li>                                          
                 <li><a href="{% url 'dq:tblCpy_list' %}"><span>데이터 복제 관리</span></a></li>                                          
               </ul>

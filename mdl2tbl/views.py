@@ -325,6 +325,32 @@ class Djbs12FormView(FormView):
         context = super(Djbs12FormView, self).get_context_data(**kwargs)
         return context
 
+class Djbs12pFormView(FormView): 
+    '''컬럼비교(DEV<=>PRD)'''
+    template_name = 'mdl2tbl/djbs12.html'    
+    def get_context_data(self, **kwargs):
+        # form_class에 기본 get값을 설정한다.            
+        self.form_class = CompForm
+        gets = self.request.GET
+        # yws_gets에 get값들을 복제한다.
+        self.form_class.yws_gets = gets.copy()
+        self.form_class.yws_gets['title'] = "AURORA(dev<=>prd)비교"
+        # 특정 default값을 가져와서 설정한다.
+        for ( pk , val ) in gets.items():            
+            self.form_class.base_fields[pk].initial =  val
+            #print('pk:val',pk,val)
+        # subjArea(subject Area) 입력값이 있으면 수행을 한다.
+        if ( len(gets) > 0 and 'subjArea' in gets ):
+            self.form_class.yws_gets['title'] = "AURORA(dev<=>prd)비교 (" + gets['subjArea'] + ")"
+            self.form_class.yws_gets['submitUrl'] = 'djbs12p'
+            self.form_class.yws_rows = Aurora.comp_dev_prd(gets['subjArea'])
+        else:
+            self.form_class.yws_rows = {}
+            
+        # context를 가져온다.
+        context = super(Djbs12pFormView, self).get_context_data(**kwargs)
+        return context
+
 class Djbs13FormView(FormView): 
     '''컬럼비교(DEV<=>TST)'''
     template_name = 'mdl2tbl/djbs12.html'    
@@ -350,6 +376,32 @@ class Djbs13FormView(FormView):
         # context를 가져온다.
         context = super(Djbs13FormView, self).get_context_data(**kwargs)
         return context 
+
+class Djbs13pFormView(FormView): 
+    '''컬럼비교(DEV<=>PRD)'''
+    template_name = 'mdl2tbl/djbs12.html'    
+    def get_context_data(self, **kwargs):
+        # form_class에 기본 get값을 설정한다.            
+        self.form_class = CompForm
+        gets = self.request.GET
+        # yws_gets에 get값들을 복제한다.
+        self.form_class.yws_gets = gets.copy()
+        self.form_class.yws_gets['title'] = "AURORA인덱스(dev<=>prd)비교"
+        # 특정 default값을 가져와서 설정한다.
+        for ( pk , val ) in gets.items():            
+            self.form_class.base_fields[pk].initial =  val
+            #print('pk:val',pk,val)
+        # subjArea(subject Area) 입력값이 있으면 수행을 한다.
+        if ( len(gets) > 0 and 'subjArea' in gets ):
+            self.form_class.yws_gets['title'] = "AURORA인덱스(dev<=>prd)비교 (" + gets['subjArea'] + ")"
+            self.form_class.yws_gets['submitUrl'] = 'djbs13p'
+            self.form_class.yws_rows = Aurora.comp_idx_dev_prd(gets['subjArea'])
+        else:
+            self.form_class.yws_rows = {}
+
+        # context를 가져온다.
+        context = super(Djbs13pFormView, self).get_context_data(**kwargs)
+        return context         
 
 class Djbs14FormView(FormView):
     template_name = 'mdl2tbl/djbs14.html'    

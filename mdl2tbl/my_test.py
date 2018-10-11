@@ -136,9 +136,9 @@ where table_schema in ( 'x'
 # 코드 목록
 ##############################
 def get_cd_list(p_col_nm = "EVNT_TKPT_STAT_CD"):
-    return get_qry('ltcm',"""select /*+ SQL */ 
+    return get_qry('ltcm',"""select 
 A.CD,A.CD_NM 
-from ltcmstdev.st_csco_cd a
+from ltcmstprd.st_csco_cd a
 where group_cd like upper(%(col_nm)s) AND csco_id = 'ELLOTTE'
 ORDER BY SORT_RNKG""",{'col_nm': p_col_nm})   
 

@@ -6,3 +6,4 @@ metax/conn_info.py
 metax/my_conn.py
 /docs
 *.out
+/dq/migrations

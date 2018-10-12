@@ -7,3 +7,4 @@ metax/my_conn.py
 /docs
 *.out
 /dq/migrations
+*.err

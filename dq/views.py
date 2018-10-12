@@ -30,6 +30,8 @@ from django.db import transaction, connection
 from .out_table import trace_out_table,matrix_out_table
 ############################## 공통 함수 및 class  ##############################
 from .funcs import * 
+############################## meta schema setting ##############################
+from metax import my_conn
 
 
 app_name ='dq'
@@ -344,7 +346,8 @@ def vrfyLog_save(vl,env='dev'):
     conn = Conn('meta')
     try: 
         conn.dbConn()
-        conn.select_db('elltdqtst')
+        meta_sch = my_conn.DATABASES['default']['NAME']
+        conn.select_db(meta_sch)
         conn.execute(sqlStr)
         conn.commit()
     except Exception as e :

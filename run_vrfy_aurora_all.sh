@@ -6,5 +6,5 @@ if [ $# -ne 1  ]; then
     echo = USAGE : $0 prd # PRD ENV 
     echo ====================================================
 else
-   curl -d env=$env http://127.0.0.1:8000/dq/vrfy/tasks_aurora/ 
+   curl -d env=$env http://127.0.0.1:80/dq/vrfy/tasks_aurora/ 
 fi
